@@ -1,10 +1,22 @@
-import wave.WaveGenerator
+import audio.WaveGenerator
 import kotlinx.cinterop.*
-import platform.posix.*
 import portaudio.*
 import kotlin.math.PI
 
 private val sinwave = WaveGenerator()
+
+const val SAMPLE_RATE = 48000.0
+val FRAMES_PER_BUFFER = 256UL
+
+var globalPhase = 0.0
+
+enum class WAVEFORM {
+    SINE,
+    NOISE,
+    SQUARE,
+    SAWTOOTH,
+    TRIANGLE
+}
 
 @OptIn(ExperimentalForeignApi::class)
 class AudioSetup {
@@ -59,6 +71,12 @@ class AudioSetup {
 
     fun terminate() {
         Pa_Terminate()
+    }
+
+    fun destroy() {
+        stop()
+        close()
+        terminate()
     }
 }
 

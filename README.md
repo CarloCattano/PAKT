@@ -6,7 +6,11 @@ PortAudio Kotlin Bindings could allow for multiplatform access to the [PortAudio
 
 ## Status
 
-- HelloWorld example: ✅ in Main.kt
+- Basic audio output: ✅ in Main.kt
+- Waveform selection: ✅ in Main.kt
+- Audio Setup abstracted: ✅ in AudioSetup.kt
+- Input support: ❌
+- Advanced audio processing: ❌
 
 ## Requirements
 
