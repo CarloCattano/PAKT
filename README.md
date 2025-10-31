@@ -12,6 +12,14 @@ PortAudio Kotlin Bindings could allow for multiplatform access to the [PortAudio
 
 PortAudio headers should be installed on your system.
 
+## Usage:
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk
+./gradlew runDebugExecutableNative
+```
+
+A sound will play for 2 seconds and then stop.
+
 tested on:
 
 - Linux ✅
