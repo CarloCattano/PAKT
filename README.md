@@ -10,7 +10,7 @@ PortAudio Kotlin Bindings could allow for multiplatform access to the [PortAudio
 
 ## Requirements
 
-curl headers should be installed on your system.
+PortAudio headers should be installed on your system.
 
 tested on:
 
