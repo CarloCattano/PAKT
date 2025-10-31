@@ -1,16 +1,32 @@
 import kotlinx.cinterop.*
-import platform.posix.sin
+import platform.posix.srand
+import platform.posix.time
+
 import portaudio.*
 import kotlin.math.PI
+import wave.WaveGenerator
 
 val SAMPLE_RATE = 48000.0
 val FRAMES_PER_BUFFER = 256UL
-private var globalPhase = 0.0
+
+var globalPhase = 0.0
+private val sinwave = WaveGenerator()
+
+enum class WAVEFORM {
+    SINE,
+    NOISE,
+    SQUARE,
+    SAWTOOTH,
+    TRIANGLE
+}
 
 @OptIn(ExperimentalForeignApi::class)
 fun main(args: Array<String>) { memScoped {
-    val err = Pa_Initialize()
 
+    // init posix random
+    srand(time(null).toUInt())
+
+    val err = Pa_Initialize()
     check(err == paNoError) {
         "PortAudio init failed: ${Pa_GetErrorText(err)?.toKString()}"
     }
@@ -37,7 +53,7 @@ fun main(args: Array<String>) { memScoped {
         SAMPLE_RATE,
         FRAMES_PER_BUFFER,
         paClipOff,
-        staticCFunction(::sineCallback),
+        staticCFunction(::audioCallback),
         null
     )
     check(openErr == paNoError) { "OpenStream failed: ${Pa_GetErrorText(openErr)?.toKString()}" }
@@ -54,7 +70,7 @@ fun main(args: Array<String>) { memScoped {
 }
 
 @OptIn(ExperimentalForeignApi::class)
-private fun sineCallback(
+private fun audioCallback(
     input: CPointer<*>?,
     output: CPointer<*>?,
     frameCount: ULong,
@@ -69,12 +85,9 @@ private fun sineCallback(
 
     var phase = globalPhase
 
+    // Per sample processing
     for (i in 0UL until frameCount) {
-
-        out[i.toInt()] = sin(phase).toFloat()
-
-        phase += phaseIncrement
-        if (phase >= 2.0 * PI) phase -= 2.0 * PI
+        out[i.toInt()] = sinwave.generate(freq, sampleRate, WAVEFORM.SAWTOOTH)
     }
     globalPhase = phase
     return paContinue.toInt()
