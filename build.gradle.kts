@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.kotlinxSerialization)
 }
 
-group = "me.user"
-version = "1.0-SNAPSHOT"
+group = "42.sound"
+version = "0.1-HELLOWORLD"
 
 repositories {
     mavenCentral()
@@ -24,6 +24,11 @@ kotlin {
     }
 
     nativeTarget.apply {
+        compilations.getByName("main") {
+            cinterops {
+                val portaudio by creating
+            }
+        }
         binaries {
             executable {
                 entryPoint = "main"

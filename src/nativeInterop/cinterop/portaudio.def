@@ -1,0 +1,4 @@
+package = portaudio
+headers = portaudio.h
+compilerOpts = -I/usr/include -I/usr/include/x86_64-linux-gnu
+linkerOpts = -L/usr/lib -lm -lportaudio
